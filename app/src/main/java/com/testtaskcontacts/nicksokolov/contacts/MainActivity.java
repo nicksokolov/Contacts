@@ -4,8 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RecyclerView contactsRecyclerView;
     private LinearLayoutManager verticalLayoutManager;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         contactsRecyclerView.setLayoutManager(verticalLayoutManager);
 
         contactsRecyclerAdapter = new RecyclerAdapter();
-        //contactsRecyclerView.setAdapter(contactsRecyclerAdapter);
+        contactsRecyclerView.setAdapter(contactsRecyclerAdapter);
         contactsRecyclerAdapter.addInfos(ContactsInfo.getContactsInfo());
 
     }

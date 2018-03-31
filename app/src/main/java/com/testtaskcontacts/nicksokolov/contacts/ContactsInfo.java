@@ -1,8 +1,10 @@
 package com.testtaskcontacts.nicksokolov.contacts;
 
+import android.view.View;
+
 import java.util.ArrayList;
 
-class ContactsInfo {
+class ContactsInfo implements View.OnClickListener{
     private String name;
     private String surname;
     private String phoneNumber;
@@ -44,4 +46,8 @@ class ContactsInfo {
 
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
 }

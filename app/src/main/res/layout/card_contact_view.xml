@@ -8,7 +8,53 @@
     android:layout_margin="8dp"
     cardview:cardCornerRadius="16dp"
     cardview:cardElevation="5dp"
+    android:background="@color/myColor">
 
-    >
+    <RelativeLayout
+        android:id="@+id/layout_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/myColor"
+        >
+
+        <TextView
+            android:id="@+id/text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="6dp"
+            android:text="Name"
+            android:textSize="46dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/text_surname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@+id/text_name"
+            android:textSize="46dp"
+            android:text="Surname">
+
+        </TextView>
+        <ImageView
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_toRightOf="@+id/text_surname"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="1dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_clear_black_24dp"
+            >
+        </ImageView>>
+
+
+    </RelativeLayout>
+
 
 </android.support.v7.widget.CardView>
