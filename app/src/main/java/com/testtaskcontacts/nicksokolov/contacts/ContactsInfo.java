@@ -4,50 +4,53 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-class ContactsInfo implements View.OnClickListener{
+public class ContactsInfo {
     private String name;
     private String surname;
     private String phoneNumber;
+    //private String delete;
+
+    public ContactsInfo() {
+
+    }
 
     public ContactsInfo(String name, String surname, String phoneNumber) {
-        this.name = name;
-        this.surname = surname;
-        this.phoneNumber = phoneNumber;
+        setName(name);
+        setSurname(surname);
+        setPhoneNumber(phoneNumber);
+      //  setDelete(delete);
     }
 
     public String getName() {
         return name;
-
     }
 
-    public String getSuranme() {
+    public String getSurname() {
         return surname;
-
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
-
     }
 
-    public static ArrayList<ContactsInfo> getContactsInfo() {
-      ArrayList<ContactsInfo> contactsInfos=new ArrayList<>();
-
-      contactsInfos.add(new ContactsInfo("Nick","Sokolov","+38-095-20-30-590"));
-      contactsInfos.add(new ContactsInfo("John","Petruha","+38-093-53-31-762"));
-      contactsInfos.add(new ContactsInfo("Kolobok","Eretic","+38-068-99-10-491"));
-      contactsInfos.add(new ContactsInfo("Ifrem","Kingsman","+38-066-01-06-804"));
-      contactsInfos.add(new ContactsInfo("Nika","Chocolate","+38-063-92-15-101"));
-      contactsInfos.add(new ContactsInfo("Michael","Self","+38-095-32-49-361"));
-      contactsInfos.add(new ContactsInfo("Kirill","Swings","+38-098-34-68-189"));
-      contactsInfos.add(new ContactsInfo("Alex","Smith","+38-066-67-32-001"));
-
-      return contactsInfos;
-
+    public void setName(String name) {
+        this.name = name;
     }
 
-    @Override
-    public void onClick(View v) {
-
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+//    public String getDelete() {
+//        return delete;
+//    }
+
+    //
+//    public void setDelete(String delete) {
+//        this.delete = delete;
+//    }
 }
