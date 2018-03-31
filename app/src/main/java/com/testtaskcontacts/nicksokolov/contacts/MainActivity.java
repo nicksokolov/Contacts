@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         contactsRecyclerView.setLayoutManager(verticalLayoutManager);
 
         contactsRecyclerAdapter = new RecyclerAdapter();
-        contactsRecyclerView.setAdapter(contactsRecyclerAdapter);
+        //contactsRecyclerView.setAdapter(contactsRecyclerAdapter);
         contactsRecyclerAdapter.addInfos(ContactsInfo.getContactsInfo());
 
     }
