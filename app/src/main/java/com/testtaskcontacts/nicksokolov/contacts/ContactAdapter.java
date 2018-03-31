@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,8 +109,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         alertDialog.setNegativeButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                SQLiteDatabase database=MainActivity.dataBase.getWritableDatabase();
+                database.delete(SQLiteDataBase.TABLE_CONTACTS,SQLiteDataBase.KEY_ID + "='" + pos +"'",null);
+                MainActivity.readDataBase();
                 contactsList.remove(pos);
                 notifyItemRemoved(pos);
+                database.close();
             }
         });
         AlertDialog dialog = alertDialog.create();

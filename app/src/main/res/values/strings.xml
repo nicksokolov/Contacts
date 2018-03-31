@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Contacts</string>
     <string name="action_settings">action_settings</string>
+    <string name="textTitle">Введите данные контакта</string>
+    <string name="edit_name">Введите имя контакта</string>
+    <string name="edit_surname">Введите фамилию контакта</string>
+    <string name="edit_phone">Введите номер телефона контакта</string>
 </resources>

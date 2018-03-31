@@ -12,8 +12,8 @@
         android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="51dp"
-        android:text="Введите данные контакта"
+        android:layout_marginTop="10dp"
+        android:text="@string/textTitle"
         android:textSize="18dp" />
 
     <EditText
@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="99dp"
-        android:hint="Введите имя контакта" />
+        android:layout_marginTop="60dp"
+        android:hint="@string/edit_name" />
 
     <EditText
 
@@ -32,24 +32,27 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="166dp"
-        android:hint="Введите фамилию контакта" />
+        android:layout_marginTop="100dp"
+
+        android:hint="@string/edit_surname" />
 
     <EditText
+
         android:id="@+id/edit_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:hint="Введите номер телефона контакта"
+       android:layout_marginTop="150dp"
+        android:hint="@string/edit_phone"
         android:inputType="number"/>
 
     <Button
         android:id="@+id/accept_button"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:text="Готово"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="151dp" />
+        android:layout_marginBottom="67dp"
+        android:text="Готово" />
 
 </RelativeLayout>
