@@ -1,5 +1,6 @@
 package com.testtaskcontacts.nicksokolov.contacts;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,7 +25,7 @@ public class SQLiteDataBase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_CONTACTS + "(" + KEY_ID + " integer primary key," + KEY_NAME + " text,"
+        db.execSQL("create table " + TABLE_CONTACTS + "(" + KEY_ID + " integer primary key autoincrement," + KEY_NAME + " text,"
                 + KEY_SURNAME + " text," + KEY_PHONE + " text" + "\n" + ")");
 
     }
@@ -35,19 +36,25 @@ public class SQLiteDataBase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public static void showTable(SQLiteDatabase db) {
-        Cursor cursor = db.query(SQLiteDataBase.TABLE_CONTACTS, null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex(SQLiteDataBase.KEY_ID);
-            int nameIndex = cursor.getColumnIndex(SQLiteDataBase.KEY_NAME);
-            int surnameIndex = cursor.getColumnIndex(SQLiteDataBase.KEY_SURNAME);
-            int phoneIndex = cursor.getColumnIndex(SQLiteDataBase.KEY_PHONE);
-            do {
-                Log.d("mLog", "ID = " + cursor.getInt(idIndex) + ", name = " + cursor.getString(nameIndex)
-                        + ", surname = " + cursor.getString(surnameIndex) + ", phone = " + cursor.getString(phoneIndex));
-            }while(cursor.moveToNext());
-        }else{
-            Log.d("mLog","0 rows");
-        }
+    public void saveNewContact(ContactsInfo contact,int id) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_NAME, contact.getName());
+        contentValues.put(KEY_SURNAME, contact.getSurname());
+        contentValues.put(KEY_PHONE, contact.getPhoneNumber());
+        db.insert(TABLE_CONTACTS, null, contentValues);
+        db.close();
+        MainActivity.contactsRecyclerAdapter.notifyItemInserted(id);
     }
+
+    public void deleteContact(int pos){
+        int id=pos+1;
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_CONTACTS + " WHERE _id='" + id + "'");
+        MainActivity.contactsRecyclerAdapter.notifyItemRemoved(id);
+        MainActivity.readDataBase();
+        db.close();
+    }
+
 }

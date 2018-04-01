@@ -109,12 +109,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         alertDialog.setNegativeButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SQLiteDatabase database=MainActivity.dataBase.getWritableDatabase();
-                database.delete(SQLiteDataBase.TABLE_CONTACTS,SQLiteDataBase.KEY_ID + "='" + pos +"'",null);
+                MainActivity.dataBase.deleteContact(pos);
                 MainActivity.readDataBase();
-                contactsList.remove(pos);
                 notifyItemRemoved(pos);
-                database.close();
+
             }
         });
         AlertDialog dialog = alertDialog.create();

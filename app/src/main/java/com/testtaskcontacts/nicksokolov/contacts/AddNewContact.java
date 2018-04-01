@@ -39,13 +39,8 @@ public class AddNewContact extends AppCompatActivity implements View.OnClickList
             Toast.makeText(this, "Введите номер телефона", Toast.LENGTH_SHORT).show();
         } else {
             MainActivity.infos.add(new ContactsInfo(editName.getText().toString(), editSurname.getText().toString(), editPhoneNumber.getText().toString()));
-            SQLiteDatabase database=MainActivity.dataBase.getWritableDatabase();
-            ContentValues contentValues=new ContentValues();
-            contentValues.put(SQLiteDataBase.KEY_NAME,editName.getText().toString());
-            contentValues.put(SQLiteDataBase.KEY_SURNAME,editSurname.getText().toString());
-            contentValues.put(SQLiteDataBase.KEY_PHONE,editPhoneNumber.getText().toString());
-            database.insert(SQLiteDataBase.TABLE_CONTACTS,null,contentValues);
-
+            MainActivity.dataBase.saveNewContact(new ContactsInfo(editName.getText().toString(),
+                    editSurname.getText().toString(), editPhoneNumber.getText().toString()),MainActivity.infos.size());
             MainActivity.readDataBase();
             finish();
         }

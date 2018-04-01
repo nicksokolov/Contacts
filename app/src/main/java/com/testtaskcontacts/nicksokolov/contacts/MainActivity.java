@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private RecyclerView contactsRecyclerView;
     private LinearLayoutManager verticalLayoutManager;
     private LinearLayoutManager horizontallLayoutManager;
-    private ContactAdapter contactsRecyclerAdapter;
+    static ContactAdapter contactsRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         contactsRecyclerView.setHasFixedSize(true);
         contactsRecyclerAdapter = new ContactAdapter(infos, this);
 
-        dataBase = new SQLiteDataBase(this);
+        dataBase = new SQLiteDataBase(this);/*
+        SQLiteDatabase db = dataBase.getWritableDatabase();
+        dataBase.onUpgrade(db, 2, 3);*/
         getData();
         contactsRecyclerView.setAdapter(contactsRecyclerAdapter);
 
@@ -59,64 +61,69 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     public void getData() {
 
-        SQLiteDatabase sqLiteDatabase = dataBase.getReadableDatabase();
-//        for (int i = 0; i < sqLiteDatabase.)
-            infos.add(new ContactsInfo("Nick", "Sokolov", "+38-095-20-30-590"));
-        infos.add(new ContactsInfo("John", "Petruha", "+38-066-20-10-998"));
-        infos.add(new ContactsInfo("Kolobok", "Eretic", "+38-068-20-01-101"));
-        infos.add(new ContactsInfo("Ifrem", "Kingsman", "+38-098-19-00-590"));
-        infos.add(new ContactsInfo("Nika", "Chocolate", "+38-095-20-32-590"));
-        infos.add(new ContactsInfo("Alex", "Smith", "+38-095-20-30-312"));
-        infos.add(new ContactsInfo("Michael", "Self", "+38-050-21-34-490"));
-        infos.add(new ContactsInfo("Kirill", "Swings", "+38-065-11-65-520"));
+        SQLiteDatabase sqLiteDatabase = dataBase.getWritableDatabase();
 
 
+        String query = "SELECT * FROM " + SQLiteDataBase.TABLE_CONTACTS;
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
 
-        /*ContentValues contentValues=new ContentValues();
-        contentValues.put(SQLiteDataBase.KEY_NAME,"Nick");
-        contentValues.put(SQLiteDataBase.KEY_SURNAME,"Sokolov");
-        contentValues.put(SQLiteDataBase.KEY_PHONE,"+38-095-20-30-590");
+        ContactsInfo contact;
 
-        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS,null,contentValues);
-        contentValues.put(SQLiteDataBase.KEY_NAME,"John");
-        contentValues.put(SQLiteDataBase.KEY_SURNAME,"Petruha");
-        contentValues.put(SQLiteDataBase.KEY_PHONE,"+38-066-20-10-998");
+        if (cursor.moveToFirst()) {
+            do {
+                contact = new ContactsInfo();
 
-        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS,null,contentValues);
-        contentValues.put(SQLiteDataBase.KEY_NAME,"Kolobok");
-        contentValues.put(SQLiteDataBase.KEY_SURNAME,"Eretic");
-        contentValues.put(SQLiteDataBase.KEY_PHONE,"+38-068-20-01-101");
+                contact.setName(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_NAME)));
+                contact.setSurname(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_SURNAME)));
+                contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_PHONE)));
+                infos.add(contact);
+            } while (cursor.moveToNext());
+        }
+/*
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SQLiteDataBase.KEY_NAME, "Nick");
+        contentValues.put(SQLiteDataBase.KEY_SURNAME, "Sokolov");
+        contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-095-20-30-590");
 
-        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS,null,contentValues);
+        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);
+        contentValues.put(SQLiteDataBase.KEY_NAME, "John");
+        contentValues.put(SQLiteDataBase.KEY_SURNAME, "Petruha");
+        contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-066-20-10-998");
 
-        contentValues.put(SQLiteDataBase.KEY_NAME,"Ifrem");
-        contentValues.put(SQLiteDataBase.KEY_SURNAME,"Kingsman");
-        contentValues.put(SQLiteDataBase.KEY_PHONE,"+38-098-19-00-590");
+        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);
+        contentValues.put(SQLiteDataBase.KEY_NAME, "Kolobok");
+        contentValues.put(SQLiteDataBase.KEY_SURNAME, "Eretic");
+        contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-068-20-01-101");
 
-        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS,null,contentValues);
-        contentValues.put(SQLiteDataBase.KEY_NAME,"Nika");
-        contentValues.put(SQLiteDataBase.KEY_SURNAME,"Chocolate");
-        contentValues.put(SQLiteDataBase.KEY_PHONE,"+38-095-20-32-590");
+        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);
+
+        contentValues.put(SQLiteDataBase.KEY_NAME, "Ifrem");
+        contentValues.put(SQLiteDataBase.KEY_SURNAME, "Kingsman");
+        contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-098-19-00-590");
+
+        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);
+        contentValues.put(SQLiteDataBase.KEY_NAME, "Nika");
+        contentValues.put(SQLiteDataBase.KEY_SURNAME, "Chocolate");
+        contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-095-20-32-590");
 
 
-        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS,null,contentValues);
-        contentValues.put(SQLiteDataBase.KEY_NAME,"Alex");
-        contentValues.put(SQLiteDataBase.KEY_SURNAME,"Smith");
-        contentValues.put(SQLiteDataBase.KEY_PHONE,"+38-095-20-30-312");
+        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);
+        contentValues.put(SQLiteDataBase.KEY_NAME, "Alex");
+        contentValues.put(SQLiteDataBase.KEY_SURNAME, "Smith");
+        contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-095-20-30-312");
 
-        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS,null,contentValues);
-        contentValues.put(SQLiteDataBase.KEY_NAME,"Michael");
-        contentValues.put(SQLiteDataBase.KEY_SURNAME,"Serif");
-        contentValues.put(SQLiteDataBase.KEY_PHONE,"+38-050-21-34-490");
+        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);
+        contentValues.put(SQLiteDataBase.KEY_NAME, "Michael");
+        contentValues.put(SQLiteDataBase.KEY_SURNAME, "Serif");
+        contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-050-21-34-490");
 
-        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS,null,contentValues);
-        contentValues.put(SQLiteDataBase.KEY_NAME,"Kirill");
-        contentValues.put(SQLiteDataBase.KEY_SURNAME,"Swings");
-        contentValues.put(SQLiteDataBase.KEY_PHONE,"+38-065-11-65-520");
+        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);
+        contentValues.put(SQLiteDataBase.KEY_NAME, "Kirill");
+        contentValues.put(SQLiteDataBase.KEY_SURNAME, "Swings");
+        contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-065-11-65-520");
 
-        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS,null,contentValues);
-*/
-        SQLiteDataBase.showTable(sqLiteDatabase);
+        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);
+ */       readDataBase();
 
         contactsRecyclerAdapter.notifyDataSetChanged();
 
@@ -161,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             int surnameIndex = cursor.getColumnIndex(SQLiteDataBase.KEY_SURNAME);
             int phoneIndex = cursor.getColumnIndex(SQLiteDataBase.KEY_PHONE);
             do {
-                Log.d("mLog", "ID = " + cursor.getInt(idIndex) + ", name = " + cursor.getString(nameIndex)
+                Log.d("mLog", "\nID = " + cursor.getInt(idIndex) + ", name = " + cursor.getString(nameIndex)
                         + ", surname = " + cursor.getString(surnameIndex) + ", phone = " + cursor.getString(phoneIndex));
             } while (cursor.moveToNext());
         } else {
