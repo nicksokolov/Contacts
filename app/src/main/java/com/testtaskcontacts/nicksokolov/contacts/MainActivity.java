@@ -37,10 +37,11 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setViews();
-/*
 
-        SQLiteDatabase db = dataBase.getWritableDatabase();
-        dataBase.onUpgrade(db, 2, 3);*/
+        dataBase = new SQLiteDataBase(this);
+       /* SQLiteDatabase db = dataBase.getWritableDatabase();
+        dataBase.onUpgrade(db, 2, 3);
+       */ getData();
 
     }
 
@@ -51,8 +52,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         contactsRecyclerView.setLayoutManager(verticalLayoutManager);
         contactsRecyclerView.setHasFixedSize(true);
         contactsRecyclerAdapter = new ContactAdapter(infos, this);
-        dataBase = new SQLiteDataBase(this);
-        getData();
+
         contactsRecyclerView.setAdapter(contactsRecyclerAdapter);
         contactsRecyclerAdapter.setClickListener(this);
 
@@ -86,10 +86,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 infos.add(contact);
             } while (cursor.moveToNext());
         }
-
-        readDataBase();
         contactsRecyclerAdapter.notifyDataSetChanged();
-      /*  ContentValues contentValues = new ContentValues();
+/*         ContentValues contentValues = new ContentValues();
         contentValues.put(SQLiteDataBase.KEY_NAME, "Nick");
         contentValues.put(SQLiteDataBase.KEY_SURNAME, "Sokolov");
         contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-095-20-30-590");
@@ -132,7 +130,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-065-11-65-520");
 
         sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);
-      */
+       */  readDataBase();
+
     }
 
     @Override

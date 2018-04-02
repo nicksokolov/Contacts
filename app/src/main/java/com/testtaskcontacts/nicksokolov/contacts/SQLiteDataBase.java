@@ -51,8 +51,9 @@ public class SQLiteDataBase extends SQLiteOpenHelper {
     public void deleteContact(int pos){
         int id=pos+1;
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_CONTACTS + " WHERE _id='" + id + "'");
-        MainActivity.contactsRecyclerAdapter.notifyItemRemoved(id-1);
+        db.delete(TABLE_CONTACTS,KEY_ID+"="+ id,null);
+        MainActivity.infos.remove(pos);
+        MainActivity.contactsRecyclerAdapter.notifyDataSetChanged();
         MainActivity.readDataBase();
         db.close();
     }
