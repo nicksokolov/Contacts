@@ -103,6 +103,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         });
     }
 
+    @Override
+    public int getItemCount() {
+        return contactsList.size();
+    }
+
     public void setClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
@@ -128,8 +133,5 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         dialog.show();
     }
 
-    @Override
-    public int getItemCount() {
-        return contactsList.size();
-    }
+
 }

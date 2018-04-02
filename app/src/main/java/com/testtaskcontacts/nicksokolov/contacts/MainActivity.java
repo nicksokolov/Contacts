@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     }
 
-    public void setViews(){
+    public void setViews() {
         contactsRecyclerView = (RecyclerView) findViewById(R.id.contacts_recycler_view);
         verticalLayoutManager = new LinearLayoutManager(getApplicationContext());
         horizontallLayoutManager = new LinearLayoutManager(this);
@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         dataBase = new SQLiteDataBase(this);
         getData();
         contactsRecyclerView.setAdapter(contactsRecyclerAdapter);
-
         contactsRecyclerAdapter.setClickListener(this);
 
     }
@@ -136,31 +135,12 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
       */
     }
 
-
     @Override
     public void onClick(View view, int adapterPosition) {
 
         ContactsInfo current = infos.get(adapterPosition);
         onContactSelected(current);
     }
-
-/*
-
-    private void search(SearchView searchView) {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                contactsRecyclerAdapter.getFilter().filter(query);
-                return true;
-            }
-        });
-    }
-*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -175,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
     public void onBackPressed() {
         if (!searchView.isIconified()) {
             searchView.setIconified(true);
