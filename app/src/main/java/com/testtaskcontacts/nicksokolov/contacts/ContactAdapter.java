@@ -26,6 +26,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     private Context context;
     private ItemClickListener itemClickListener;
 
+    // Разобраться с фильтром!
+
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -38,6 +40,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
                 } else {
                     for (ContactsInfo row : contactsList) {
                         if (row.getName().toLowerCase().contains(charString.toLowerCase())) {
+                            Log.d("mLog","IF = true");
                             filteredList.add(row);
                         }
                     }
@@ -47,16 +50,19 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
                 FilterResults filterResults = new FilterResults();
                 filterResults.count = contactsListFiltered.size();
                 filterResults.values = contactsListFiltered;
+                Log.d("mLog","in Filter");
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 contactsListFiltered = (List<ContactsInfo>) results.values;
+                Log.d("mLog","in publishResults()");
                 MainActivity.contactsRecyclerAdapter.notifyDataSetChanged();
             }
         };
     }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -75,6 +81,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         public void onClick(View v) {
             if (itemClickListener != null) itemClickListener.onClick(v, getAdapterPosition());
         }
+
+    }
+    public void setSearchResult(List<ContactsInfo>contact){
+        contactsList=contact;
+        notifyDataSetChanged();
     }
 
     public ContactAdapter(List<ContactsInfo> contactsList, Context context) {
@@ -112,7 +123,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         this.itemClickListener = itemClickListener;
     }
 
-    public void DeleteOrNotContact(View v, final int pos) {
+    private void DeleteOrNotContact(View v, final int pos) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle("Удаление контакта");
         alertDialog.setMessage("Вы действительно хотите удалить контакт?");

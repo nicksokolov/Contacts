@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-public class ContactInfoActivity extends AppCompatActivity implements ItemClickListener {
+public class ContactInfoActivity extends AppCompatActivity {
     private String contactName, contactSurname, contactPhoneNumber;
 
     @Override
@@ -35,8 +35,4 @@ public class ContactInfoActivity extends AppCompatActivity implements ItemClickL
         phoneNumber.setText(contactPhoneNumber);
     }
 
-    @Override
-    public void onClick(View view, int adapterPosition) {
-
-    }
 }

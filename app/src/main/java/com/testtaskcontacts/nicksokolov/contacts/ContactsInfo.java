@@ -8,7 +8,6 @@ public class ContactsInfo {
     private String name;
     private String surname;
     private String phoneNumber;
-    //private String delete;
 
     public ContactsInfo() {
 
@@ -18,7 +17,6 @@ public class ContactsInfo {
         setName(name);
         setSurname(surname);
         setPhoneNumber(phoneNumber);
-      //  setDelete(delete);
     }
 
     public String getName() {
@@ -44,13 +42,4 @@ public class ContactsInfo {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
-//    public String getDelete() {
-//        return delete;
-//    }
-
-    //
-//    public void setDelete(String delete) {
-//        this.delete = delete;
-//    }
 }

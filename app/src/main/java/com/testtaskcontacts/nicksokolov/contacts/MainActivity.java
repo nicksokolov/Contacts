@@ -36,16 +36,13 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setViews();
-
-        dataBase = new SQLiteDataBase(this);
        /* SQLiteDatabase db = dataBase.getWritableDatabase();
         dataBase.onUpgrade(db, 2, 3);
-       */ getData();
-
+       */
+        setViewsAndData();
     }
 
-    public void setViews() {
+    public void setViewsAndData() {
         contactsRecyclerView = (RecyclerView) findViewById(R.id.contacts_recycler_view);
         verticalLayoutManager = new LinearLayoutManager(getApplicationContext());
         horizontallLayoutManager = new LinearLayoutManager(this);
@@ -55,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
         contactsRecyclerView.setAdapter(contactsRecyclerAdapter);
         contactsRecyclerAdapter.setClickListener(this);
-
+        dataBase = new SQLiteDataBase(this);
+        getData();
     }
 
     @Override

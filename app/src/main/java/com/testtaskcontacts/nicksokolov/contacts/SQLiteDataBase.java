@@ -49,6 +49,9 @@ public class SQLiteDataBase extends SQLiteOpenHelper {
     }
 
     public void deleteContact(int pos){
+
+        // Неправильная работа базы данных при удалении эл-ов
+
         int id=pos+1;
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CONTACTS,KEY_ID+"="+ id,null);
