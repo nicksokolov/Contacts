@@ -24,8 +24,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements ItemClickListener {
 
     static SQLiteDataBase dataBase;
-
-    static ArrayList<ContactsInfo> infos = new ArrayList<>();
+    static int i;
+    static List<ContactsInfo> contactsList = new ArrayList<>();
     private RecyclerView contactsRecyclerView;
     private LinearLayoutManager verticalLayoutManager;
     private LinearLayoutManager horizontallLayoutManager;
@@ -36,10 +36,10 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       /* SQLiteDatabase db = dataBase.getWritableDatabase();
-        dataBase.onUpgrade(db, 2, 3);
-       */
         setViewsAndData();
+        /*SQLiteDatabase db = dataBase.getWritableDatabase();
+        dataBase.onUpgrade(db, 2, 3);
+    */
     }
 
     public void setViewsAndData() {
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         horizontallLayoutManager = new LinearLayoutManager(this);
         contactsRecyclerView.setLayoutManager(verticalLayoutManager);
         contactsRecyclerView.setHasFixedSize(true);
-        contactsRecyclerAdapter = new ContactAdapter(infos, this);
+        contactsRecyclerAdapter = new ContactAdapter(contactsList, this);
 
         contactsRecyclerView.setAdapter(contactsRecyclerAdapter);
         contactsRecyclerAdapter.setClickListener(this);
@@ -74,18 +74,21 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
 
         ContactsInfo contact;
-
+        i=1;
         if (cursor.moveToFirst()) {
             do {
                 contact = new ContactsInfo();
                 contact.setName(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_NAME)));
                 contact.setSurname(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_SURNAME)));
                 contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_PHONE)));
-                infos.add(contact);
+                contact.setId(i);
+                contactsList.add(contact);
+                i++;
             } while (cursor.moveToNext());
         }
         contactsRecyclerAdapter.notifyDataSetChanged();
-/*         ContentValues contentValues = new ContentValues();
+        /*
+        ContentValues contentValues = new ContentValues();
         contentValues.put(SQLiteDataBase.KEY_NAME, "Nick");
         contentValues.put(SQLiteDataBase.KEY_SURNAME, "Sokolov");
         contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-095-20-30-590");
@@ -127,15 +130,14 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         contentValues.put(SQLiteDataBase.KEY_SURNAME, "Swings");
         contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-065-11-65-520");
 
-        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);
-       */  readDataBase();
-
+        sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);*/
+        readDataBase();
     }
 
     @Override
     public void onClick(View view, int adapterPosition) {
 
-        ContactsInfo current = infos.get(adapterPosition);
+        ContactsInfo current = contactsList.get(adapterPosition);
         onContactSelected(current);
     }
 
@@ -209,9 +211,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
             @Override
             public boolean onQueryTextChange(String query) {
-                Log.d("mLog", "In onQueryTextChange");
+                Log.d("mLog", "In onQueryTextChange  Нажата клавиша = " +query);
                 contactsRecyclerAdapter.getFilter().filter(query);
-                return true;
+                return false;
             }
         });
         return true;

@@ -38,9 +38,10 @@ public class AddNewContact extends AppCompatActivity implements View.OnClickList
         } else if (editPhoneNumber.getText().toString().equals("")) {
             Toast.makeText(this, "Введите номер телефона", Toast.LENGTH_SHORT).show();
         } else {
-            MainActivity.infos.add(new ContactsInfo(editName.getText().toString(), editSurname.getText().toString(), editPhoneNumber.getText().toString()));
+            MainActivity.contactsList.add(new ContactsInfo(editName.getText().toString(),
+                    editSurname.getText().toString(), editPhoneNumber.getText().toString(),MainActivity.i++));
             MainActivity.dataBase.saveNewContact(new ContactsInfo(editName.getText().toString(),
-                    editSurname.getText().toString(), editPhoneNumber.getText().toString()),MainActivity.infos.size());
+                    editSurname.getText().toString(), editPhoneNumber.getText().toString(),MainActivity.i),MainActivity.i-1);
             MainActivity.readDataBase();
             finish();
         }

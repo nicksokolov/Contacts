@@ -5,6 +5,7 @@ import android.view.View;
 import java.util.ArrayList;
 
 public class ContactsInfo {
+    private int id;
     private String name;
     private String surname;
     private String phoneNumber;
@@ -13,7 +14,8 @@ public class ContactsInfo {
 
     }
 
-    public ContactsInfo(String name, String surname, String phoneNumber) {
+    public ContactsInfo(String name, String surname, String phoneNumber, int id) {
+        setId(id);
         setName(name);
         setSurname(surname);
         setPhoneNumber(phoneNumber);
@@ -41,5 +43,13 @@ public class ContactsInfo {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

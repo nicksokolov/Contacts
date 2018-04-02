@@ -48,14 +48,13 @@ public class SQLiteDataBase extends SQLiteOpenHelper {
         MainActivity.contactsRecyclerAdapter.notifyItemInserted(id);
     }
 
-    public void deleteContact(int pos){
+    public void deleteContact(ContactsInfo contact){
 
         // Неправильная работа базы данных при удалении эл-ов
-
-        int id=pos+1;
+        Log.d("mLog","Name Contact" + contact.getName()+ "ID Contact" + contact.getId());
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_CONTACTS,KEY_ID+"="+ id,null);
-        MainActivity.infos.remove(pos);
+        db.delete(TABLE_CONTACTS,KEY_ID+"="+ contact.getId(),null);
+        MainActivity.contactsList.remove(contact);
         MainActivity.contactsRecyclerAdapter.notifyDataSetChanged();
         MainActivity.readDataBase();
         db.close();

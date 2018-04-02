@@ -34,31 +34,29 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charString = constraint.toString();
-                List<ContactsInfo> filteredList = new ArrayList<>();
                 if (charString.isEmpty()) {
-                    filteredList = contactsList;
+                    contactsListFiltered = MainActivity.contactsList;
                 } else {
-                    for (ContactsInfo row : contactsList) {
-                        if (row.getName().toLowerCase().contains(charString.toLowerCase())) {
-                            Log.d("mLog","IF = true");
-                            filteredList.add(row);
+                    List<ContactsInfo> filteredList = new ArrayList<>();
+                    for (ContactsInfo current : contactsList) {
+                        if (current.getName().toLowerCase().contains(charString.toLowerCase())
+                                ||current.getSurname().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(current);
                         }
                     }
+
                     contactsListFiltered = filteredList;
                 }
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.count = contactsListFiltered.size();
-                filterResults.values = contactsListFiltered;
-                Log.d("mLog","in Filter");
-                return filterResults;
+                FilterResults results = new FilterResults();
+                results.count = contactsListFiltered.size();
+                results.values = contactsListFiltered;
+                return results;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                contactsListFiltered = (List<ContactsInfo>) results.values;
-                Log.d("mLog","in publishResults()");
-                MainActivity.contactsRecyclerAdapter.notifyDataSetChanged();
+                contactsList = (List<ContactsInfo>) results.values;
+                notifyDataSetChanged();
             }
         };
     }
@@ -83,12 +81,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         }
 
     }
-    public void setSearchResult(List<ContactsInfo>contact){
-        contactsList=contact;
-        notifyDataSetChanged();
-    }
 
     public ContactAdapter(List<ContactsInfo> contactsList, Context context) {
+        this.contactsListFiltered = contactsList;
         this.contactsList = contactsList;
         this.context = context;
     }
@@ -109,7 +104,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DeleteOrNotContact(v, position);
+                DeleteOrNotContact(v, contactsInfo);
             }
         });
     }
@@ -123,7 +118,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         this.itemClickListener = itemClickListener;
     }
 
-    private void DeleteOrNotContact(View v, final int pos) {
+    private void DeleteOrNotContact(View v, final ContactsInfo contact) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle("Удаление контакта");
         alertDialog.setMessage("Вы действительно хотите удалить контакт?");
@@ -136,7 +131,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         alertDialog.setNegativeButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                MainActivity.dataBase.deleteContact(pos);
+                MainActivity.dataBase.deleteContact(contact);
                 MainActivity.readDataBase();
             }
         });
