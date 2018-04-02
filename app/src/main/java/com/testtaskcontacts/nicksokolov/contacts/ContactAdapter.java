@@ -5,26 +5,62 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static android.support.v4.content.ContextCompat.startActivity;
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHolder> implements Filterable {
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHolder> {
-
+    private List<ContactsInfo> contactsListFiltered;
     private List<ContactsInfo> contactsList;
     private Context context;
     private ItemClickListener itemClickListener;
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charString = constraint.toString();
+                List<ContactsInfo> filteredList = new ArrayList<>();
+                if (charString.isEmpty()) {
+                    filteredList = contactsList;
+                } else {
+                    for (ContactsInfo row : contactsList) {
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+                    contactsListFiltered = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.count = contactsListFiltered.size();
+                filterResults.values = contactsListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                contactsListFiltered = (List<ContactsInfo>) results.values;
+                MainActivity.contactsRecyclerAdapter.notifyDataSetChanged();
+            }
+        };
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         public TextView name, surname, phone, delete;
-//        public ImageView ;
 
         public MyViewHolder(View view) {
             super(view);
@@ -50,7 +86,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_contact_view, parent, false);
-
         return new MyViewHolder(itemView);
     }
 
@@ -60,36 +95,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         holder.name.setText(contactsInfo.getName());
         holder.surname.setText(contactsInfo.getSurname());
         holder.phone.setText(contactsInfo.getPhoneNumber());
-        //  holder.delete.setText(contactsInfo.getDelete());
-
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DeleteOrNotContact(v, position);
             }
         });
-
-//        holder.name.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, ContactInfoActivity.class);
-//                intent.putExtra("name", position);
-//                intent.putExtra("surname", position);
-//                intent.putExtra("phoneNumber", position);
-//                context.startActivity(intent);
-//            }
-//        });
-//
-//        holder.surname.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, ContactInfoActivity.class);
-//                intent.putExtra("name", position);
-//                intent.putExtra("surname", position);
-//                intent.putExtra("phoneNumber", position);
-//                context.startActivity(intent);
-//            }
-//        });
     }
 
     public void setClickListener(ItemClickListener itemClickListener) {
@@ -111,13 +122,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
             public void onClick(DialogInterface dialog, int which) {
                 MainActivity.dataBase.deleteContact(pos);
                 MainActivity.readDataBase();
-                notifyItemRemoved(pos);
-
             }
         });
         AlertDialog dialog = alertDialog.create();
         dialog.show();
-
     }
 
     @Override

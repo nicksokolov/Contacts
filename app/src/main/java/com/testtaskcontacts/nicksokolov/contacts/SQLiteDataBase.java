@@ -52,7 +52,7 @@ public class SQLiteDataBase extends SQLiteOpenHelper {
         int id=pos+1;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_CONTACTS + " WHERE _id='" + id + "'");
-        MainActivity.contactsRecyclerAdapter.notifyItemRemoved(id);
+        MainActivity.contactsRecyclerAdapter.notifyItemRemoved(id-1);
         MainActivity.readDataBase();
         db.close();
     }

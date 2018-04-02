@@ -1,15 +1,18 @@
 package com.testtaskcontacts.nicksokolov.contacts;
 
+import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,26 +25,33 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
 
     static SQLiteDataBase dataBase;
 
-    static List<ContactsInfo> infos = new ArrayList<>();
+    static ArrayList<ContactsInfo> infos = new ArrayList<>();
     private RecyclerView contactsRecyclerView;
     private LinearLayoutManager verticalLayoutManager;
     private LinearLayoutManager horizontallLayoutManager;
     static ContactAdapter contactsRecyclerAdapter;
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setViews();
+/*
+
+        SQLiteDatabase db = dataBase.getWritableDatabase();
+        dataBase.onUpgrade(db, 2, 3);*/
+
+    }
+
+    public void setViews(){
         contactsRecyclerView = (RecyclerView) findViewById(R.id.contacts_recycler_view);
         verticalLayoutManager = new LinearLayoutManager(getApplicationContext());
         horizontallLayoutManager = new LinearLayoutManager(this);
         contactsRecyclerView.setLayoutManager(verticalLayoutManager);
         contactsRecyclerView.setHasFixedSize(true);
         contactsRecyclerAdapter = new ContactAdapter(infos, this);
-
-        dataBase = new SQLiteDataBase(this);/*
-        SQLiteDatabase db = dataBase.getWritableDatabase();
-        dataBase.onUpgrade(db, 2, 3);*/
+        dataBase = new SQLiteDataBase(this);
         getData();
         contactsRecyclerView.setAdapter(contactsRecyclerAdapter);
 
@@ -59,10 +69,9 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         }
     }
 
-    public void getData() {
+    static public void getData() {
 
         SQLiteDatabase sqLiteDatabase = dataBase.getWritableDatabase();
-
 
         String query = "SELECT * FROM " + SQLiteDataBase.TABLE_CONTACTS;
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
@@ -72,15 +81,16 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         if (cursor.moveToFirst()) {
             do {
                 contact = new ContactsInfo();
-
                 contact.setName(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_NAME)));
                 contact.setSurname(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_SURNAME)));
                 contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_PHONE)));
                 infos.add(contact);
             } while (cursor.moveToNext());
         }
-/*
-        ContentValues contentValues = new ContentValues();
+
+        readDataBase();
+        contactsRecyclerAdapter.notifyDataSetChanged();
+      /*  ContentValues contentValues = new ContentValues();
         contentValues.put(SQLiteDataBase.KEY_NAME, "Nick");
         contentValues.put(SQLiteDataBase.KEY_SURNAME, "Sokolov");
         contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-095-20-30-590");
@@ -123,10 +133,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         contentValues.put(SQLiteDataBase.KEY_PHONE, "+38-065-11-65-520");
 
         sqLiteDatabase.insert(SQLiteDataBase.TABLE_CONTACTS, null, contentValues);
- */       readDataBase();
-
-        contactsRecyclerAdapter.notifyDataSetChanged();
-
+      */
     }
 
 
@@ -134,19 +141,26 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     public void onClick(View view, int adapterPosition) {
 
         ContactsInfo current = infos.get(adapterPosition);
-        Intent intent = new Intent(this, ContactInfoActivity.class);
-        intent.putExtra("name", current.getName());
-        intent.putExtra("surname", current.getSurname());
-        intent.putExtra("phoneNumber", current.getPhoneNumber());
-        startActivity(intent);
+        onContactSelected(current);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+/*
 
+    private void search(SearchView searchView) {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                contactsRecyclerAdapter.getFilter().filter(query);
+                return true;
+            }
+        });
+    }
+*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -155,8 +169,26 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, AddNewContact.class);
             startActivityForResult(intent, 1);
+        } else if (id == R.id.action_search) {
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onBackPressed() {
+        if (!searchView.isIconified()) {
+            searchView.setIconified(true);
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    public void onContactSelected(ContactsInfo contact) {
+        Intent intent = new Intent(this, ContactInfoActivity.class);
+        intent.putExtra("name", contact.getName());
+        intent.putExtra("surname", contact.getSurname());
+        intent.putExtra("phoneNumber", contact.getPhoneNumber());
+        startActivity(intent);
     }
 
     public static void readDataBase() {
@@ -177,5 +209,36 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         cursor.close();
         database.close();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                contactsRecyclerAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                Log.d("mLog", "In onQueryTextChange");
+                contactsRecyclerAdapter.getFilter().filter(query);
+                return true;
+            }
+        });
+        return true;
+    }
+
+
 }
 

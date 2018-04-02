@@ -22,7 +22,6 @@ public class ContactInfoActivity extends AppCompatActivity implements ItemClickL
             contactName = getIntent().getStringExtra("name");
             contactSurname = getIntent().getStringExtra("surname");
             contactPhoneNumber = getIntent().getStringExtra("phoneNumber");
-
             setInfo(contactName,contactSurname,contactPhoneNumber);
         }
     }
