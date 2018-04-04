@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class AddNewContact extends AppCompatActivity implements View.OnClickListener {
 
-    EditText editName, editSurname, editPhoneNumber;
+    private EditText editName, editSurname, editPhoneNumber;
     private Button btn;
 
     @Override

@@ -1,33 +1,29 @@
 package com.testtaskcontacts.nicksokolov.contacts;
 
-import android.app.SearchManager;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.testtaskcontacts.nicksokolov.contacts.R.id.add_new_contact_fragment;
+import static com.testtaskcontacts.nicksokolov.contacts.MainActivity.readDataBase;
 
-public class MainActivity extends AppCompatActivity implements ItemClickListener {
+public class RecyclerMainFragment extends Fragment {
 
-    RecyclerMainFragment recyclerMainFragment;
-    AddNewContactFragment addNewContactFragment;
-    ContactsInfoFragment contactsInfoFragment;
     static SQLiteDataBase dataBase;
     static int i;
     static List<ContactsInfo> contactsList = new ArrayList<>();
@@ -37,20 +33,27 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     static ContactAdapter contactsRecyclerAdapter;
     SearchView searchView;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setViewsAndData();
-
-        recyclerMainFragment = (RecyclerMainFragment) getSupportFragmentManager().findFragmentById(R.id.contacts_recycler_view_fragment);
-        contactsInfoFragment = (ContactsInfoFragment) getSupportFragmentManager().findFragmentById(R.id.contacts_info_fragment);
-        addNewContactFragment = (AddNewContactFragment) getSupportFragmentManager().findFragmentById(R.id.add_new_contact_fragment);
-
+        TextView name = findViewById(R.id.contact_name);
+        name.setText(contactName);
+        TextView surname = findViewById(R.id.contact_surname);
+        surname.setText(contactSurname);
+        TextView phoneNumber = findViewById(R.id.contact_number);
+        phoneNumber.setText(contactPhoneNumber);
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_recycler_main, container, false);
+    }
+
+
     public void setViewsAndData() {
-        contactsRecyclerView = (RecyclerView) findViewById(R.id.contacts_recycler_view);
+        contactsRecyclerView = (RecyclerView) this.findViewById(R.id.contacts_recycler_view);
         verticalLayoutManager = new LinearLayoutManager(getApplicationContext());
         horizontallLayoutManager = new LinearLayoutManager(this);
         contactsRecyclerView.setLayoutManager(verticalLayoutManager);
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
 
         ContactsInfo contact;
-        i = 1;
+        i=1;
         if (cursor.moveToFirst()) {
             do {
                 contact = new ContactsInfo();
@@ -161,71 +164,4 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (!searchView.isIconified()) {
-            searchView.setIconified(true);
-            return;
-        }
-        super.onBackPressed();
-    }
-
-    public void onContactSelected(ContactsInfo contact) {
-        Intent intent = new Intent(this, ContactInfoActivity.class);
-        intent.putExtra("name", contact.getName());
-        intent.putExtra("surname", contact.getSurname());
-        intent.putExtra("phoneNumber", contact.getPhoneNumber());
-        startActivity(intent);
-    }
-
-    public static void readDataBase() {
-        SQLiteDatabase database = dataBase.getReadableDatabase();
-        Cursor cursor = database.query(SQLiteDataBase.TABLE_CONTACTS, null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex(SQLiteDataBase.KEY_ID);
-            int nameIndex = cursor.getColumnIndex(SQLiteDataBase.KEY_NAME);
-            int surnameIndex = cursor.getColumnIndex(SQLiteDataBase.KEY_SURNAME);
-            int phoneIndex = cursor.getColumnIndex(SQLiteDataBase.KEY_PHONE);
-            do {
-                Log.d("mLog", "\nID = " + cursor.getInt(idIndex) + ", name = " + cursor.getString(nameIndex)
-                        + ", surname = " + cursor.getString(surnameIndex) + ", phone = " + cursor.getString(phoneIndex));
-            } while (cursor.moveToNext());
-        } else {
-            Log.d("mLog", "0 rows");
-        }
-        cursor.close();
-        database.close();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
-
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                contactsRecyclerAdapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                Log.d("mLog", "In onQueryTextChange  Нажата клавиша = " + query);
-                contactsRecyclerAdapter.getFilter().filter(query);
-                return false;
-            }
-        });
-        return true;
-    }
-
-
 }
-

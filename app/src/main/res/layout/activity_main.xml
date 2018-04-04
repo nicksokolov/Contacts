@@ -1,4 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <fragment
+        android:id="@+id/contacts_recycler_view_fragment"
+        android:name="com.testtaskcontacts.nicksokolov.contacts.RecyclerMainFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </fragment>
+
+    <fragment
+        android:id="@+id/contacts_info_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.testtaskcontacts.nicksokolov.contacts.ContactsInfoFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/add_new_contact_fragment"
+        android:name="com.testtaskcontacts.nicksokolov.contacts.AddNewContactFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </fragment>
+<!--<?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.RecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,4 +38,5 @@
     android:scrollbars="vertical"
     tools:context=".MainActivity">
 
-</android.support.v7.widget.RecyclerView>
+</android.support.v7.widget.RecyclerView>-->
+</LinearLayout>
