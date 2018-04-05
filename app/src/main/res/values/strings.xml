@@ -7,14 +7,15 @@
     <string name="edit_phone">Введите номер телефона контакта</string>
     <string name="action_search">action_search</string>
     <string name="search_hint">Введите данные пользователя</string>
-    <string name="hint_surname">Введите фамилию контакта</string>
-    <string name="hint_name">Введите имя контакта</string>
-    <string name="hint_phone">Введите номер телефона контакта</string>
-    <string name="ready">Готово</string>
-    <string name="phone_number">Phone Number:</string>
-    <string name="surname">Surname:</string>
-    <string name="name">Name:</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="phone_number">Phone Number:</string>
+    <string name="name">Name:</string>
+    <string name="surname">Surname:</string>
+    <string name="enter_number">Введите номер телефона контакта</string>
+    <string name="ready">Готово</string>
+    <string name="enter_surname">Введите фамилию контакта</string>
+    <string name="enter_name">Введите имя контакта</string>
+    <string name="enter_data">Введите данные контакта</string>
 </resources>

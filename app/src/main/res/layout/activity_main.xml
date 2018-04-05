@@ -1,42 +1,21 @@
-<LinearLayout
-
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:orientation="vertical">
-
-    <fragment
-        android:id="@+id/contacts_recycler_view_fragment"
-        android:name="com.testtaskcontacts.nicksokolov.contacts.RecyclerMainFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </fragment>
-
-    <fragment
-        android:id="@+id/contacts_info_fragment"
+    android:orientation="vertical"
+    android:id="@+id/place_holder"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<!--
+   <fragment
+        android:id="@+id/recycler_view_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.testtaskcontacts.nicksokolov.contacts.ContactsInfoFragment">
-    </fragment>
+        android:name="com.testtaskcontacts.nicksokolov.contacts.RecyclerViewFragment">
+    </fragment>-->
 
-    <fragment
-        android:id="@+id/add_new_contact_fragment"
-        android:name="com.testtaskcontacts.nicksokolov.contacts.AddNewContactFragment"
+    <!--<fragment
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </fragment>
-<!--<?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/contacts_recycler_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:padding="8dp"
-    android:scrollbars="vertical"
-    tools:context=".MainActivity">
-
-</android.support.v7.widget.RecyclerView>-->
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:id="@+id/info_fragment"
+        android:name="com.testtaskcontacts.nicksokolov.contacts.InfoFragment">
+    </fragment>-->
+</FrameLayout>

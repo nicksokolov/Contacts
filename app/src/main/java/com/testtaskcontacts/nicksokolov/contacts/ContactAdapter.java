@@ -1,11 +1,19 @@
 package com.testtaskcontacts.nicksokolov.contacts;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.icu.text.IDNA;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,18 +23,19 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.PendingIntent.getActivity;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHolder> implements Filterable {
 
     private List<ContactsInfo> contactsListFiltered;
     private List<ContactsInfo> contactsList;
-    private Context context;
+    static FragmentActivity context;
     private ItemClickListener itemClickListener;
-
-    // Разобраться с фильтром!
 
     @Override
     public Filter getFilter() {
@@ -35,12 +44,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charString = constraint.toString();
                 if (charString.isEmpty()) {
-                    contactsListFiltered = MainActivity.contactsList;
+                    contactsListFiltered = RecyclerViewFragment.contactsList;
                 } else {
                     List<ContactsInfo> filteredList = new ArrayList<>();
                     for (ContactsInfo current : contactsList) {
                         if (current.getName().toLowerCase().contains(charString.toLowerCase())
-                                ||current.getSurname().toLowerCase().contains(charString.toLowerCase())) {
+                                || current.getSurname().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(current);
                         }
                     }
@@ -82,7 +91,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
 
     }
 
-    public ContactAdapter(List<ContactsInfo> contactsList, Context context) {
+    public ContactAdapter(List<ContactsInfo> contactsList, FragmentActivity context) {
         this.contactsListFiltered = contactsList;
         this.contactsList = contactsList;
         this.context = context;
@@ -101,6 +110,25 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         holder.name.setText(contactsInfo.getName());
         holder.surname.setText(contactsInfo.getSurname());
         holder.phone.setText(contactsInfo.getPhoneNumber());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InfoFragment infoFragment = new InfoFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("contactName", contactsInfo.getName());
+                bundle.putString("contactSurname", contactsInfo.getSurname());
+                bundle.putString("contactPhone", contactsInfo.getPhoneNumber());
+                Log.d("mLog", contactsInfo.getName() + contactsInfo.getSurname() + contactsInfo.getPhoneNumber());
+                infoFragment.setArguments(bundle);
+                context.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.place_holder, infoFragment, null)
+                        .addToBackStack(null)
+                        .commit();
+                /*
+                fragmentJump(contactsInfo);*/
+            }
+        });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,10 +140,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
     @Override
     public int getItemCount() {
         return contactsList.size();
-    }
-
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
     }
 
     private void DeleteOrNotContact(View v, final ContactsInfo contact) {
@@ -131,7 +155,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
         alertDialog.setNegativeButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                MainActivity.dataBase.deleteContact(contact);
+                RecyclerViewFragment.dataBase.deleteContact(contact);
                 MainActivity.readDataBase();
             }
         });

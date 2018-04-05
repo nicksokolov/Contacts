@@ -45,7 +45,7 @@ public class SQLiteDataBase extends SQLiteOpenHelper {
         contentValues.put(KEY_PHONE, contact.getPhoneNumber());
         db.insert(TABLE_CONTACTS, null, contentValues);
         db.close();
-        MainActivity.contactsRecyclerAdapter.notifyItemInserted(id);
+        RecyclerViewFragment.contactsRecyclerAdapter.notifyItemInserted(id);
     }
 
     public void deleteContact(ContactsInfo contact){
@@ -54,8 +54,8 @@ public class SQLiteDataBase extends SQLiteOpenHelper {
         Log.d("mLog","Name Contact" + contact.getName()+ "ID Contact" + contact.getId());
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CONTACTS,KEY_ID+"="+ contact.getId(),null);
-        MainActivity.contactsList.remove(contact);
-        MainActivity.contactsRecyclerAdapter.notifyDataSetChanged();
+        RecyclerViewFragment.contactsList.remove(contact);
+        RecyclerViewFragment.contactsRecyclerAdapter.notifyDataSetChanged();
         MainActivity.readDataBase();
         db.close();
     }
