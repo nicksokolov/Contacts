@@ -24,22 +24,14 @@ import java.util.List;
 
 
 public class MainActivity extends FragmentActivity {
-    static Context context;
     static int i;
-    static List<ContactsInfo> contactsList = new ArrayList<>();
-    static ContactAdapter contactsRecyclerAdapter;
-    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         RecyclerViewFragment fragment=new RecyclerViewFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.place_holder, fragment,null).commit();
-      /*SQLiteDatabase db = dataBase.getWritableDatabase();
-        dataBase.onUpgrade(db, 2, 3);
-    */
     }
 
 
@@ -63,35 +55,5 @@ public class MainActivity extends FragmentActivity {
         cursor.close();
         database.close();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
-
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                contactsRecyclerAdapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                Log.d("mLog", "In onQueryTextChange  Нажата клавиша = " +query);
-                contactsRecyclerAdapter.getFilter().filter(query);
-                return false;
-            }
-        });
-        return true;
-    }
-
 }
 

@@ -1,5 +1,6 @@
 package com.testtaskcontacts.nicksokolov.contacts;
 
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -112,12 +113,22 @@ public class RecyclerViewFragment extends Fragment {
         imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddNewContactFragment addNewContactFragment=new AddNewContactFragment();
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.place_holder,addNewContactFragment,null)
-                        .addToBackStack(null)
-                        .commit();
+
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    AddNewContactFragment addNewContactFragment = new AddNewContactFragment();
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.place_holder, addNewContactFragment, null)
+                            .addToBackStack(null)
+                            .commit();
+                }else{
+                    AddNewContactFragment addNewContactFragment = new AddNewContactFragment();
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.place_for_support_fragments, addNewContactFragment, null)
+                            .addToBackStack(null)
+                            .commit();
+                }
             }
         });
     }

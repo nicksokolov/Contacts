@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/landscape"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<FrameLayout android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_weight="1"
+    android:id="@+id/place_holder"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+       <fragment
+            android:id="@+id/recycler_view_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.testtaskcontacts.nicksokolov.contacts.RecyclerViewFragment">
+        </fragment>-->
+
+    <!--<fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/info_fragment"
+        android:name="com.testtaskcontacts.nicksokolov.contacts.InfoFragment">
+    </fragment>-->
+</FrameLayout>
+
+    <FrameLayout
+        android:layout_weight="1"
+        android:id="@+id/place_for_support_fragments"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+</LinearLayout>

@@ -8,6 +8,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.IDNA;
 import android.os.Bundle;
@@ -120,11 +121,19 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
                 bundle.putString("contactPhone", contactsInfo.getPhoneNumber());
                 Log.d("mLog", contactsInfo.getName() + contactsInfo.getSurname() + contactsInfo.getPhoneNumber());
                 infoFragment.setArguments(bundle);
-                context.getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.place_holder, infoFragment, null)
-                        .addToBackStack(null)
-                        .commit();
+                if (context.getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT) {
+                    context.getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.place_holder, infoFragment, null)
+                            .addToBackStack(null)
+                            .commit();
+                }else{
+                    context.getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.place_for_support_fragments, infoFragment, null)
+                            .addToBackStack(null)
+                            .commit();
+                }
                 /*
                 fragmentJump(contactsInfo);*/
             }

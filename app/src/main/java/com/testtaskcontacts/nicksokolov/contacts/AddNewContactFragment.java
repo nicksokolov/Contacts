@@ -32,11 +32,11 @@ public class AddNewContactFragment extends android.support.v4.app.Fragment imple
     public void onClick(View v) {
 
         if (editName.getText().toString().equals(""))
-            Toast.makeText(MainActivity.context, "Введите имя", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ContactAdapter.context, "Введите имя", Toast.LENGTH_SHORT).show();
         else if (editSurname.getText().toString().equals("")) {
-            Toast.makeText(MainActivity.context, "Введите Фамилию", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ContactAdapter.context, "Введите Фамилию", Toast.LENGTH_SHORT).show();
         } else if (editPhoneNumber.getText().toString().equals("")) {
-            Toast.makeText(MainActivity.context, "Введите номер телефона", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ContactAdapter.context, "Введите номер телефона", Toast.LENGTH_SHORT).show();
         } else {
             RecyclerViewFragment.contactsList.add(new ContactsInfo(editName.getText().toString(),
                     editSurname.getText().toString(), editPhoneNumber.getText().toString(), RecyclerViewFragment.totalCount++));
