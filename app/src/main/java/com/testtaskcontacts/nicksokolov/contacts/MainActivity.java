@@ -1,27 +1,11 @@
 package com.testtaskcontacts.nicksokolov.contacts;
 
-import android.app.FragmentManager;
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class MainActivity extends FragmentActivity {
     static int i;
@@ -31,11 +15,38 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         RecyclerViewFragment fragment=new RecyclerViewFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.place_holder, fragment,null).commit();
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            getSupportFragmentManager().beginTransaction().add(R.id.place_holder, fragment, null).commit();
+        }else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            getSupportFragmentManager().beginTransaction().add(R.id.place_for_support_fragments, fragment, null).commit();
+        }
     }
 
 
 
+    static public void getData() {
+
+        SQLiteDatabase sqLiteDatabase = RecyclerViewFragment.dataBase.getWritableDatabase();
+
+        String query = "SELECT * FROM " + SQLiteDataBase.TABLE_CONTACTS;
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+        ContactsInfo contact;
+        RecyclerViewFragment.totalCount = 1;
+        if (cursor.moveToFirst()) {
+            do {
+                contact = new ContactsInfo();
+                contact.setName(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_NAME)));
+                contact.setSurname(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_SURNAME)));
+                contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_PHONE)));
+                contact.setId(RecyclerViewFragment.totalCount);
+                RecyclerViewFragment.contactsList.add(contact);
+                Log.d("mLog", "Contact:  " + contact.getName());
+                RecyclerViewFragment.totalCount++;
+            } while (cursor.moveToNext());
+        }
+        RecyclerViewFragment.contactsRecyclerAdapter.notifyDataSetChanged();
+    }
 
     public static void readDataBase() {
         SQLiteDatabase database = RecyclerViewFragment.dataBase.getReadableDatabase();

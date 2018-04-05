@@ -24,6 +24,7 @@ public class AddNewContactFragment extends android.support.v4.app.Fragment imple
         editPhoneNumber = (EditText) view.findViewById(R.id.edit_phone);
         btn = (Button) view.findViewById(R.id.accept_button);
         btn.setOnClickListener(this);
+        setRetainInstance(true);
         return view;
     }
 

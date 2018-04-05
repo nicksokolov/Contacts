@@ -121,18 +121,19 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.MyViewHo
                 bundle.putString("contactPhone", contactsInfo.getPhoneNumber());
                 Log.d("mLog", contactsInfo.getName() + contactsInfo.getSurname() + contactsInfo.getPhoneNumber());
                 infoFragment.setArguments(bundle);
-                if (context.getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT) {
+                if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                     context.getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.place_holder, infoFragment, null)
                             .addToBackStack(null)
                             .commit();
-                }else{
+                } else {
                     context.getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.place_for_support_fragments, infoFragment, null)
                             .addToBackStack(null)
                             .commit();
+
                 }
                 /*
                 fragmentJump(contactsInfo);*/

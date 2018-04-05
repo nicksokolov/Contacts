@@ -24,9 +24,11 @@ public class InfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_info, container, false);
+        if(getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT) {
+            view = inflater.inflate(R.layout.fragment_info, container, false);
+        }
         setViews(view);
-
+        setRetainInstance(true);
         return view;
 
     }

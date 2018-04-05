@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -20,8 +21,8 @@ import java.util.List;
 
 public class RecyclerViewFragment extends Fragment {
 
-    ImageView imgAdd;
-    SearchView searchView;
+    private ImageView imgAdd;
+    private SearchView searchView;
     static SQLiteDataBase dataBase;
     static int totalCount;
     static List<ContactsInfo> contactsList = new ArrayList<>();
@@ -40,11 +41,15 @@ public class RecyclerViewFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (view == null) {
-            view = inflater.inflate(R.layout.fragment_recyclerview_list, container, false);
+            if(getResources().getConfiguration().orientation==Configuration.ORIENTATION_PORTRAIT) {
+                view = inflater.inflate(R.layout.fragment_recyclerview_list, container, false);
+            }
+            else view = inflater.inflate(R.layout.activity_main,container,false);
             contactsRecyclerView = (RecyclerView) view.findViewById(R.id.contacts_recycler_view);
             verticalLayoutManager = new LinearLayoutManager(getActivity());
             horizontallLayoutManager = new LinearLayoutManager(getActivity());
@@ -53,11 +58,15 @@ public class RecyclerViewFragment extends Fragment {
             contactsRecyclerAdapter = new ContactAdapter(contactsList, getActivity());
             dataBase = new SQLiteDataBase(getActivity());
             contactsRecyclerView.setAdapter(contactsRecyclerAdapter);
-            getData();
+            MainActivity.getData();
             setSearchView(view);
             addNewContactFragment(view);
         }
         return view;
+    }
+
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
     }
 
     private void setSearchView(View view) {
@@ -78,7 +87,7 @@ public class RecyclerViewFragment extends Fragment {
         });
     }
 
-
+/*
     static public void getData() {
 
         SQLiteDatabase sqLiteDatabase = dataBase.getWritableDatabase();
@@ -96,11 +105,12 @@ public class RecyclerViewFragment extends Fragment {
                 contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(SQLiteDataBase.KEY_PHONE)));
                 contact.setId(totalCount);
                 contactsList.add(contact);
+                Log.d("mLog", "Contact:  " + contact.getName());
                 totalCount++;
             } while (cursor.moveToNext());
         }
         contactsRecyclerAdapter.notifyDataSetChanged();
-    }
+    }*/
 
     @Override
     public void onDetach() {
@@ -108,26 +118,29 @@ public class RecyclerViewFragment extends Fragment {
 
     }
 
-    private void addNewContactFragment(View view){
-        imgAdd=(ImageView) view.findViewById(R.id.addNewContactView);
+    private void addNewContactFragment(View view) {
+        imgAdd = (ImageView) view.findViewById(R.id.addNewContactView);
         imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                AddNewContactFragment addNewContactFragment;
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    AddNewContactFragment addNewContactFragment = new AddNewContactFragment();
+                    addNewContactFragment = new AddNewContactFragment();
+                    if(getFragmentManager() != null);
                     getFragmentManager()
                             .beginTransaction()
                             .replace(R.id.place_holder, addNewContactFragment, null)
                             .addToBackStack(null)
                             .commit();
-                }else{
-                    AddNewContactFragment addNewContactFragment = new AddNewContactFragment();
-                    getFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.place_for_support_fragments, addNewContactFragment, null)
-                            .addToBackStack(null)
-                            .commit();
+                } else {
+                    addNewContactFragment = new AddNewContactFragment();
+                    if (getFragmentManager() != null) {
+                        getFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.place_for_support_fragments, addNewContactFragment, null)
+                                .addToBackStack(null)
+                                .commit();
+                    }
                 }
             }
         });
